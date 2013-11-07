@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Conversor de Unidades</title>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js"></script>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" />
+		<script type="text/javascript" src="conversordatabaseJS.js" ></script> 
+		
+		<script type="text/javascript" src="conversorClasse.js" ></script>	
+
+	</head>
+	
+	<body onload="onInit()">
+		<div data-role="page">
+			<div data-role="header">
+				<h1>Conversor de unidades</h1>
+			</div>
+			
+			<div data-role="content">		
+					<p>getCurrentAcceleration</p>
+						
+					<form name="calcform" method="post">
+						<ul class="rounded">
+							
+							<li><input type="text"placeholder="Metros" name="metros" id="metros"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
+							</li>							
+							
+							
+							<li><select name="oper" id="oper"> 
+								<option value="polegadas">Polegadas</option> 
+								<option value="centimetros">Centimetros</option> 
+								<option value="pes">Pés</option>  
+							</select></li>
+								
+								
+							<li><input type="text" placeholder="Resultado" name="res"
+								id="res" autocapitalize="off" autocorrect="off" autocomplete="off" />
+							</li>
+						
+
+
+						
+							<button onClick="capturePhoto();">Capturar uma foto</button> <br>
+								<!--
+								<button onClick="capturePhotoEdit();">Capturar uma foto editável</button> <br>
+								<button onClick="getPhoto(pictureSource.PHOTOLIBRARY);">Biblioteca de imagens (<i>Photo Library</i>)</button><br>
+								<button onClick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">Álbum de fotos (<i>Photo Album</i>)</button><br>
+								-->
+			
+								<img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+								<img style="display:none;" id="largeImage" src="" />
+
+
+
+							
+							
+							
+							
+							<li><input type="button" class="submit" name="action" value="Calcular" onclick="calcular(document.calcform.oper.value)"  /></li>
+							<li><input type="button" class="submit" name="create" value="Gravar" onclick="onCreate()"  /></li>
+							<li><input type="button" class="submit" name="delete" value="Deletar" onclick="onDelete()" /></li>
+							<li><input type="button" class="submit" name="atualizar" value="Atualizar" onclick="history.go(0)" /></li>
+							
+						</ul>
+					</form>
+
+					<h3>Dados:</h3>
+					<ul  id="itemData" style="cursor:pointer;"></ul>
+					
+					<h4>Status:</h4>
+					<div id="status"></div>
+					
+			<div data-role="footer">
+				<h1>Criado por Láercio M. da Silva Jr. BSI10 </h1>
+			</div>
+					
+			</div>
+		</div>
+	</body>
+</html>
