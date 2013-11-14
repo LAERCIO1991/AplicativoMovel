@@ -14,7 +14,7 @@
 	<body onload="onInit()">
 		<div data-role="page">
 			<div data-role="header">
-				<h1>Conversor de unidades</h1>
+				<h1>Registre medidas de objetos</h1>
 			</div>
 			
 			<div data-role="content">		
@@ -22,26 +22,24 @@
 					<form name="calcform" method="post">
 						<ul class="rounded">
 							
-							<li><input type="text"placeholder="Metros" name="metros" id="metros"
-								autocapitalize="off" autocorrect="off" autocomplete="off" />
-							</li>							
-							
-							
-							<li><select name="oper" id="oper"> 
+							<select placeholder="Selicione a unidade de medida" name="oper" id="oper"> 
+								<option value="" default selected>Selicione a unidade de medida</option>			
+								<option value="metros">Metros</option>
 								<option value="polegadas">Polegadas</option> 
 								<option value="centimetros">Centimetros</option> 
 								<option value="pes">Pés</option>  
-							</select></li>
+							</select>
+							
+							<input type="text"placeholder="Largura" name="largura" id="largura"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
 								
+							<input type="text"placeholder="Comprimento" name="comprimento" id="comprimento"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
 								
-							<li><input type="text" placeholder="Resultado" name="res"
-								id="res" autocapitalize="off" autocorrect="off" autocomplete="off" />
-							</li>
-						
-
-
-						
-							<button onClick="capturePhoto();">Capturar uma foto</button> <br>
+							<input type="text"placeholder="Altura" name="altura" id="altura"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
+								
+							<button onClick="capturePhoto();">Capturar uma foto do objeto</button> <br>
 								<!--
 								<button onClick="capturePhotoEdit();">Capturar uma foto editável</button> <br>
 								<button onClick="getPhoto(pictureSource.PHOTOLIBRARY);">Biblioteca de imagens (<i>Photo Library</i>)</button><br>
@@ -50,16 +48,19 @@
 			
 								<img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
 								<img style="display:none;" id="largeImage" src="" />
+								
+							<input type="text"placeholder="Área do Objeto" name="area" id="area"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
 
-
-
-							<li><input type="button" class="submit" name="action" value="Acelerometro" onclick="onDeviceReady"
-							
-							
-							<li><input type="button" class="submit" name="action" value="Calcular" onclick="calcular(document.calcform.oper.value)"  /></li>
-							<li><input type="button" class="submit" name="create" value="Gravar" onclick="onCreate()"  /></li>
-							<li><input type="button" class="submit" name="delete" value="Deletar" onclick="onDelete()" /></li>
-							<li><input type="button" class="submit" name="atualizar" value="Atualizar" onclick="history.go(0)" /></li>
+							<input type="text"placeholder="Volume do Objeto" name="volume" id="volume"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
+								
+							<input type="button" class="submit" name="action" value="Calcular" onclick="calcular(document.calcform.oper.value)"  />
+							<!--<input type="button" class="submit" name="bussula" value="Bússula" onclick="onBussula()"  />   -->
+							<input type="button" class="submit" name="create" value="Gravar" onclick="onCreate()"  />
+							<input type="button" class="submit" name="delete" value="Deletar" onclick="onDelete()" />
+							<input type="button" class="submit" name="atualizar" value="Atualizar" onclick="history.go(0)" />
+							<p id= "geolocation">Findind geolocation...</p>
 							
 						</ul>
 					</form>
