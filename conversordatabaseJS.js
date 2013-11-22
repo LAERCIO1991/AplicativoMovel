@@ -31,28 +31,28 @@ function initDB(){
 }
 
 function createTables(){
-    var query = 'CREATE TABLE IF NOT EXISTS laercio(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, metros VARCHAR NOT NULL, res VARCHAR NOT NULL, oper VARCHAR NOT NULL);';
+    var query = 'CREATE TABLE IF NOT EXISTS aplicativo(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, altura VARCHAR NOT NULL, largura VARCHAR NOT NULL, comprimento VARCHAR NOT NULL, area VARCHAR NOT NULL, volume VARCHAR NOT NULL, oper VARCHAR NOT NULL);';
     try {
         localDB.transaction(function(transaction){
             transaction.executeSql(query, [], nullDataHandler, errorHandler);
-            updateStatus("Tabela 'laercio' status: OK.");
+            updateStatus("Tabela 'aplicativo' status: OK.");
         });
     } 
     catch (e) {
-        updateStatus("Erro: Data base 'laercio' não criada " + e + ".");
+        updateStatus("Erro: Data base 'aplicativo' não criada " + e + ".");
         return;
     }
 }
 function dropTables(){
-    var query = 'DROP TABLE IF EXISTS laercio;';
+    var query = 'DROP TABLE IF EXISTS aplicativo;';
     try {
         localDB.transaction(function(transaction){
             transaction.executeSql(query, [], nullDataHandler, errorHandler);
-            updateStatus("Tabela 'laercio' status: deletada.");
+            updateStatus("Tabela 'aplicativo' status: deletada.");
         });
     } 
     catch (e) {
-        updateStatus("Erro: Data base 'laercio' não deletada " + e + ".");
+        updateStatus("Erro: Data base 'aplicativo' não deletada " + e + ".");
         return;
     }
 }
@@ -62,37 +62,41 @@ function onDelete(){
     var id = document.calcform.id.value;
     
 
-    var query = 'DROP TABLE IF EXISTS laercio;';
+    var query = 'DROP TABLE IF EXISTS aplicativo;';
     try {
         localDB.transaction(function(transaction){
             transaction.executeSql(query, [], nullDataHandler, errorHandler);
-            updateStatus("Tabela 'laercio' status: deletada.");
+            updateStatus("Tabela 'aplicativo' status: deletada.");
         });
     } 
     catch (e) {
-        updateStatus("Erro: Data base 'laercio' não deletada " + e + ".");
+        updateStatus("Erro: Data base 'aplicativo' não deletada " + e + ".");
         return;
     }
 }
 
 
 function onCreate(){
-    var metros = document.calcform.metros.value;
-    var res = document.calcform.res.value;
-    var oper = document.calcform.oper.value;	
-    if (metros == "" || res == "" || oper == "") {
-        updateStatus("Erro: 'metros' e 'res' e 'oper' são campos obrigatórios!");
+    var altura = document.calcform.altura.value;
+    var largura = document.calcform.largura.value;
+	var comprimento = document.calcform.comprimento.value;
+    var oper = document.calcform.oper.value;
+    var area = document.calcform.area.value;
+    var volume = document.calcform.volume.value;
+	
+    if (altura == "" || largura == "" || comprimento == "" || oper == "" || area == "" || volume == "") {
+        updateStatus("Erro: 'altura' e 'largura' e 'oper' são campos obrigatórios!");
     }
     else {
-        var query = "insert into laercio (metros, res, oper) VALUES (?, ?, ?);";
+        var query = "insert into aplicativo (altura, largura, comprimento, oper, area, volume) VALUES (?, ?, ?, ?, ?, ?);";
         try {
             localDB.transaction(function(transaction){
-                transaction.executeSql(query, [metros, res, oper], function(transaction, results){
+                transaction.executeSql(query, [altura, largura, comprimento, oper, area, volume], function(transaction, results){
                     if (!results.rowsAffected) {
                         updateStatus("Erro: Inserção não realizada");
                     }
                     else {
-                        updateForm("", "", "", "");
+                        updateForm("", "", "", "", "", "", "");
                         updateStatus("Inserção realizada, linha id: " + results.insertId);
                         queryAndUpdateOverview();
                     }
@@ -108,7 +112,7 @@ function onCreate(){
 function onSelect(htmlLIElement){
 	var id = htmlLIElement.getAttribute("id");
 	
-	query = "SELECT * FROM laercio where id=?;";
+	query = "SELECT * FROM aplicativo where id=?;";
     try {
         localDB.transaction(function(transaction){
         
@@ -116,7 +120,7 @@ function onSelect(htmlLIElement){
             
                 var row = results.rows.item(0);
                 
-                updateForm(row['id'], row['metros'], row['res'], row['oper']);
+                updateForm(row['id'], row['altura'], row['largura'], row['comprimento'], row['oper'], row['area'], row['volume']);
                 
             }, function(transaction, error){
                 updateStatus("Erro: " + error.code + "<br>Mensagem: " + error.message);
@@ -141,7 +145,7 @@ function queryAndUpdateOverview(){
     };
 
 	
-    var query = "SELECT * FROM laercio;";
+    var query = "SELECT * FROM aplicativo;";
     try {
         localDB.transaction(function(transaction){
         
@@ -154,7 +158,7 @@ function queryAndUpdateOverview(){
                     li.setAttribute("class", "data");
                     li.setAttribute("onclick", "onSelect(this)");
                     
-                    var liText = document.createTextNode(row['metros'] + " metros = "+ row['res'] + " " + row['oper']);
+                    var liText = document.createTextNode(row['altura'] + " " + row['oper'] + " e " + row['largura'] + " " + row['oper'] + " e " + row['comprimento'] + " " + row['oper'] + " = " + row['area'] + " quadrados e " + row['volume'] + " cubicos");
                     li.appendChild(liText);
                     
                     document.getElementById("itemData").appendChild(li);
@@ -180,11 +184,14 @@ nullDataHandler = function(transaction, results){
 
 
 
-function updateForm(id, metros, res, oper){
+function updateForm(id, altura, largura, comprimento, oper, area, volume){
     document.calcform.id.value = id;
-    document.calcform.metros.value = metros;
-    document.calcform.res.value = res;
+    document.calcform.altura.value = altura;
+    document.calcform.largura.value = largura;
+    document.calcform.comprimento.value = comprimento;
 	document.calcform.oper.value = oper;
+    document.calcform.area.value = area;
+    document.calcform.volume.value = volume;
 }
 
 function updateStatus(status){
