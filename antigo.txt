@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Conversor de Unidades</title>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js"></script>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" />
+		
+		
+		<script type="text/javascript" src="conversordatabaseJS.js" ></script> 
+		<script type="text/javascript" src="conversorClasse.js" ></script>	
+        
+        <script type="text/javascript" src="mapa.js"></script>
+        <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    	<script type="text/javascript" charset="utf-8" src="camera.js"></script>
+        <script type="text/javascript" charset="utf-8" src="device.js"></script>
+        <script type="text/javascript">
+          
+		  
+	  $(document).ready(function(){
+		var conexao = new Conexao();
+		});
+
+		function connection() {
+            checkConnection();
+         }
+		</script>
+
+	</head>
+	
+	<body onload="onInit()">
+		<div data-role="page">
+			<div data-role="header">
+				<h1>Registre medidas de objetos</h1>
+			</div>
+			
+			<div data-role="content">		
+						
+					<form name="calcform" method="post">
+						<ul class="rounded">
+							
+							<select placeholder="Selicione a unidade de medida" name="oper" id="oper"> 
+								<option value="" default selected>Selicione a unidade de medida</option>			
+								<option value="metros">Metros</option>
+								<option value="polegadas">Polegadas</option> 
+								<option value="centimetros">Centimetros</option> 
+								<option value="pes">Pés</option>  
+							</select>
+							
+							<input type="text"placeholder="Largura" name="largura" id="largura"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
+								
+							<input type="text"placeholder="Comprimento" name="comprimento" id="comprimento"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
+								
+							<input type="text"placeholder="Altura" name="altura" id="altura"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
+								
+							<!--<button onClick="capturePhoto();">Capturar uma foto do objeto</button> <br>
+								<!--
+								<button onClick="capturePhotoEdit();">Capturar uma foto editável</button> <br>
+								<button onClick="getPhoto(pictureSource.PHOTOLIBRARY);">Biblioteca de imagens (<i>Photo Library</i>)</button><br>
+								<button onClick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">Álbum de fotos (<i>Photo Album</i>)</button><br>
+								-->
+			
+							 <a data-role="button" onclick="getLocation()">localizar</a>
+            				<div id="mapholder"></div>
+            				<a data-role="button" onclick="capturePhoto();">Capturar uma foto do objeto</a> <br>
+                            
+            					<img style="display:none;width:300px;height: 300px;" id="smallImage" src="" />
+    							<img style="display:none;" id="largeImage" src="" />
+            				
+            
+								
+							<input type="text"placeholder="Área do Objeto" name="area" id="area"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
+
+							<input type="text"placeholder="Volume do Objeto" name="volume" id="volume"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
+								
+							<input type="button" class="submit" name="action" value="Calcular" onclick="calcular(document.calcform.oper.value)"  />
+							<!--<input type="button" class="submit" name="bussula" value="Bússula" onclick="onBussula()"  />   -->
+							<input type="button" class="submit" name="create" value="Gravar" onclick="onCreate()"  />
+							<input type="button" class="submit" name="delete" value="Deletar" onclick="onDelete()" />
+							<input type="button" class="submit" name="atualizar" value="Atualizar" onclick="history.go(0)" />
+							
+							
+						</ul>
+					</form>
+
+					<h3>Dados:</h3>
+					<ul  id="itemData" style="cursor:pointer;"></ul>
+					
+					<h4>Status:</h4>
+					<div id="status"></div>
+                    <p><b>dados do dispositivo</b></p>
+                    <p id="deviceProperties">Carregandoas propriedades do dispositivo...</p>
+					
+			</div>
+            <div data-role="footer">
+				<h1>Criado por Láercio M. da Silva Jr. BSI10<br>
+                	& Paulo Geovani Duarte de Oliveira </h1>
+			</div>
+		</div>
+	</body>
+</html>

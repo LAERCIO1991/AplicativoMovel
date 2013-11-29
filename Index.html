@@ -1,18 +1,77 @@
 <!DOCTYPE html>
-<html>
-	<head>
+<html><head>
 		<title>Conversor de Unidades</title>
-		<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script>
-		<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js"></script>
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" />
-		<script type="text/javascript" src="conversordatabaseJS.js" ></script> 
 		
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        
+		<!--<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js"></script>-->
+        <script type="text/javascript" src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+        
+		<!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" /> -->
+	        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css"/>
+
+
+		<script type="text/javascript" src="conversordatabaseJS.js" ></script> 		
 		<script type="text/javascript" src="conversorClasse.js" ></script>	
+        
+        <script type="text/javascript" src="mapa.js"></script>
+        <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    	<script type="text/javascript" charset="utf-8" src="camera.js"></script>
+        <script type="text/javascript" charset="utf-8" src="device.js"></script>
+		<script type="text/javascript">
+		
+		
+    	$(document).ready(function(){
+		var conexao = new Conexao();
+		});	    
+		
+	
+         function connection() {
+            checkConnection();
+         }
+		 </script>
+
 
 	</head>
 	
 	<body onload="onInit()">
-		<div data-role="page">
+    	<div data-role="page" id="form1">
+        	<div data-role="header">
+            <h1>Registre medidas de objetos</h1>
+            </div>
+            
+            <div data-role="fieldcontain">
+            			
+            	<div  data-role="controlgroup" align="center">
+				
+				<div data-role="collapsible-set" id="teste">
+                  <script type="text/JavaScript">
+                     selecionaTodos();
+                  </script>
+				</div>
+					
+						
+	            	<h3>Dados:</h3>
+						<ul  id="itemData" style="cursor:pointer;"></ul>
+					
+					<h4>Status:</h4>
+						<div id="status"></div>
+                 			<br>
+                 				<p> Dados do Dispositivo</p>
+                  				<p id="deviceProperties">Carregandoas propriedades do dispositivo...</p>
+            	</div>
+            	<a data-role="button" href="#form2">adicionar um novo objeto</a>
+            </div>
+            
+            <div data-role="footer">
+	           <h1>Criado por Láercio M. da Silva Jr. BSI10<br>
+                	& Paulo Geovani Duarte de Oliveira  </h1>
+            </div>
+        </div>
+    
+    
+    
+		<div data-role="page" id="form2">
 			<div data-role="header">
 				<h1>Registre medidas de objetos</h1>
 			</div>
@@ -21,7 +80,10 @@
 						
 					<form name="calcform" method="post">
 						<ul class="rounded">
-							
+								<input type="text"placeholder="Nome do Objeto" name="nome" id="nome"
+								autocapitalize="off" autocorrect="off" autocomplete="off" />
+                                
+                                
 							<select placeholder="Selicione a unidade de medida" name="oper" id="oper"> 
 								<option value="" default selected>Selicione a unidade de medida</option>			
 								<option value="metros">Metros</option>
@@ -37,41 +99,46 @@
 								
 							<input type="text"placeholder="Altura" name="altura" id="altura"
 								autocapitalize="off" autocorrect="off" autocomplete="off" />
-								
-							<button onClick="capturePhoto();">Capturar uma foto do objeto</button> <br>
-								<!--
-								<button onClick="capturePhotoEdit();">Capturar uma foto editável</button> <br>
-								<button onClick="getPhoto(pictureSource.PHOTOLIBRARY);">Biblioteca de imagens (<i>Photo Library</i>)</button><br>
-								<button onClick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">Álbum de fotos (<i>Photo Album</i>)</button><br>
-								-->
-			
-								<img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
-								<img style="display:none;" id="largeImage" src="" />
-								
-							<input type="text"placeholder="Área do Objeto" name="area" id="area"
+                                
+							<div data-role="content" data-theme="d">	
+                            <input type="button" class="submit" data-theme="a" name="action" value="Calcular" onclick="calcular(document.calcform.oper.value)"  />
+							
+                            
+                            <input type="text"placeholder="Área do Objeto" name="area" id="area"
 								autocapitalize="off" autocorrect="off" autocomplete="off" />
 
 							<input type="text"placeholder="Volume do Objeto" name="volume" id="volume"
 								autocapitalize="off" autocorrect="off" autocomplete="off" />
+                                </div>
+                            
+                            
+								<a data-role="button" onclick="getLocation()" data-theme="a">Localizar</a>
+            				<div id="mapholder"></div>
+            				<a data-role="button" onclick="capturePhoto();" data-theme="a">Capturar uma foto do objeto</a> <br>
+                            
+            					<img style="display:none;width:300px;height: 300px;" id="smallImage" src="" />
+    							<img style="display:none;" id="largeImage" src="" />
 								
-							<input type="button" class="submit" name="action" value="Calcular" onclick="calcular(document.calcform.oper.value)"  />
-							<input type="button" class="submit" name="create" value="Gravar" onclick="onCreate()"  />
+							
+								
+							<div data-role="controlgroup" >	
+						<!--	<input type="button" class="submit" name="create" value="Gravar" onclick="onCreate()"  />-->
+                            <a data-role="button" data-theme="b" name="create" onClick="onCreate();selecionaTodos()" href="#form1">Gravar</a>
 							<input type="button" class="submit" name="delete" value="Deletar" onclick="onDelete()" />
 							<input type="button" class="submit" name="atualizar" value="Atualizar" onclick="history.go(0)" />
+                            </div>
 							
 						</ul>
 					</form>
 
-					<h3>Dados:</h3>
-					<ul  id="itemData" style="cursor:pointer;"></ul>
 					
-					<h4>Status:</h4>
-					<div id="status"></div>
 					
-			<div data-role="footer">
-				<h1>Criado por Láercio M. da Silva Jr. BSI10 </h1>
+			
+					
 			</div>
-					
+            <div data-role="footer">
+				<h1>Criado por Láercio M. da Silva Jr. BSI10<br>
+                	& Paulo Geovani Duarte de Oliveira  </h1>
 			</div>
 		</div>
 	</body>

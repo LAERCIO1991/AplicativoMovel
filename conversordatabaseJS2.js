@@ -36,28 +36,28 @@ function initDB(){
 }
 
 function createTables(){
-    var query = 'CREATE TABLE IF NOT EXISTS movel(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, nome VARCHAR NOT NULL, altura VARCHAR NOT NULL, largura VARCHAR NOT NULL, comprimento VARCHAR NOT NULL, area VARCHAR NOT NULL, volume VARCHAR NOT NULL, oper VARCHAR NOT NULL);';
+    var query = 'CREATE TABLE IF NOT EXISTS aplicativo(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, altura VARCHAR NOT NULL, largura VARCHAR NOT NULL, comprimento VARCHAR NOT NULL, area VARCHAR NOT NULL, volume VARCHAR NOT NULL, oper VARCHAR NOT NULL);';
     try {
         localDB.transaction(function(transaction){
             transaction.executeSql(query, [], nullDataHandler, errorHandler);
-            updateStatus("Tabela 'movel' status: OK.");
+            updateStatus("Tabela 'aplicativo' status: OK.");
         });
     } 
     catch (e) {
-        updateStatus("Erro: Data base 'movel' não criada " + e + ".");
+        updateStatus("Erro: Data base 'aplicativo' não criada " + e + ".");
         return;
     }
 }
 function dropTables(){
-    var query = 'DROP TABLE IF EXISTS movel;';
+    var query = 'DROP TABLE IF EXISTS aplicativo;';
     try {
         localDB.transaction(function(transaction){
             transaction.executeSql(query, [], nullDataHandler, errorHandler);
-            updateStatus("Tabela 'movel' status: deletada.");
+            updateStatus("Tabela 'aplicativo' status: deletada.");
         });
     } 
     catch (e) {
-        updateStatus("Erro: Data base 'movel' não deletada " + e + ".");
+        updateStatus("Erro: Data base 'aplicativo' não deletada " + e + ".");
         return;
     }
 }
@@ -67,22 +67,21 @@ function onDelete(){
     var id = document.calcform.id.value;
     
 
-    var query = 'DROP TABLE IF EXISTS movel;';
+    var query = 'DROP TABLE IF EXISTS aplicativo;';
     try {
         localDB.transaction(function(transaction){
             transaction.executeSql(query, [], nullDataHandler, errorHandler);
-            updateStatus("Tabela 'movel' status: deletada.");
+            updateStatus("Tabela 'aplicativo' status: deletada.");
         });
     } 
     catch (e) {
-        updateStatus("Erro: Data base 'movel' não deletada " + e + ".");
+        updateStatus("Erro: Data base 'aplicativo' não deletada " + e + ".");
         return;
     }
 }
 
 
 function onCreate(){
-	var nome = document.calcform.nome.value;
     var altura = document.calcform.altura.value;
     var largura = document.calcform.largura.value;
 	var comprimento = document.calcform.comprimento.value;
@@ -90,14 +89,14 @@ function onCreate(){
     var area = document.calcform.area.value;
     var volume = document.calcform.volume.value;
 	
-    if ( nome == "" || oper == "" ) {
+    if (altura == "" || largura == "" || comprimento == "" || oper == "" || area == "" || volume == "") {
         updateStatus("Erro: 'altura' e 'largura' e 'oper' são campos obrigatórios!");
     }
     else {
-        var query = "insert into movel (nome, altura, largura, comprimento, oper, area, volume) VALUES (?, ?, ?, ?, ?, ?, ?);";
+        var query = "insert into aplicativo (altura, largura, comprimento, oper, area, volume) VALUES (?, ?, ?, ?, ?, ?);";
         try {
             localDB.transaction(function(transaction){
-                transaction.executeSql(query, [nome, altura, largura, comprimento, oper, area, volume], function(transaction, results){
+                transaction.executeSql(query, [altura, largura, comprimento, oper, area, volume], function(transaction, results){
                     if (!results.rowsAffected) {
                         updateStatus("Erro: Inserção não realizada");
                     }
@@ -119,7 +118,7 @@ function onCreate(){
 function onSelect(htmlLIElement){
 	var id = htmlLIElement.getAttribute("id");
 	
-	query = "SELECT * FROM movel where id=?;";
+	query = "SELECT * FROM aplicativo where id=?;";
     try {
         localDB.transaction(function(transaction){
         
@@ -127,7 +126,7 @@ function onSelect(htmlLIElement){
             
                 var row = results.rows.item(0);
                 
-                updateForm(row['id'], row['nome'], row['altura'], row['largura'], row['comprimento'], row['oper'], row['area'], row['volume']);
+                updateForm(row['id'], row['altura'], row['largura'], row['comprimento'], row['oper'], row['area'], row['volume']);
                 
             }, function(transaction, error){
                 updateStatus("Erro: " + error.code + "<br>Mensagem: " + error.message);
@@ -151,7 +150,7 @@ function queryAndUpdateOverview(){
     	};
 	}
 	/*
-    var query = "SELECT * FROM movel;";
+    var query = "SELECT * FROM aplicativo;";
     try {
         localDB.transaction(function(transaction){
         
@@ -184,28 +183,19 @@ function queryAndUpdateOverview(){
 /* Seleciona todos os registros do Banco de Dados*/
 	function selecionaTodos(){
 		//Realiza a leitura no banco
-		var query = "SELECT * FROM movel;";
+		var query = "SELECT * FROM aplicativo;";
 		try {
 			localDB.transaction(function(transaction){			
 				transaction.executeSql(query, [], function(transaction, results){
-				
-
-            document.getElementById('teste').innerHTML = "";
-			
-
-            for (var i = 0; i < results.rows.length; i++) {
-			
-			var row = results.rows.item(i);
-			
-               document.getElementById('teste').innerHTML += "<div data-role='collapsible'>" +
-                     "<h2>" + row['nome'] + "</h2>" +
-                     "<p> Altura= "+ row['altura'] +" "+ row['oper'] + " | Largura= " + row['largura'] + " " + row['oper'] + " | Comprimento= " + row['comprimento'] + " " + row['oper'] + " | Area= " +row['area'] + "  " + row['oper'] + " Quadrados "+" | Volume= " + row['volume']+ " " + row['oper'] + " Cubicos </p>" +
-                  "</div>";
-         }
-					
-					
-					
- 
+					objLista = "";
+					for (var i = 0; i < results.rows.length; i++) {
+						var row = results.rows.item(i);
+						objLista += "<tr><td>" + row['altura'] +" "+ row['oper'] + "</td> <td>" + row['largura'] + " " + row['oper'] + "</td><td>" + row['comprimento'] + " " + row['oper'] + "</td><td> " +row['area'] + "  " + row['oper'] + " Quadrado "+"</td><td>" + row['volume']+ "Cubicos " + "</tr>";
+																
+					}
+//    objLista += "</tbody>";
+             
+             $("#divLista").html(objLista);
 				}, function(transaction, error){
 					updateStatus("Erro: " + error.code + "\n Mensagem: " + error.message);
 				});
@@ -229,9 +219,8 @@ nullDataHandler = function(transaction, results){
 
 
 
-function updateForm(id, nome, altura, largura, comprimento, oper, area, volume){
+function updateForm(id, altura, largura, comprimento, oper, area, volume){
     document.calcform.id.value = id;
-    document.calcform.nome.value = nome;
     document.calcform.altura.value = altura;
     document.calcform.largura.value = largura;
     document.calcform.comprimento.value = comprimento;
